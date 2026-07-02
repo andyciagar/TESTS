@@ -1,15 +1,20 @@
-using Api.Application.Abstractions;
+using Api.Domain.ValueObjects;
+using Api.Infrastructure.Data;
+using Mediator;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.Application.Features.Usuarios.GetUsuarioById;
 
-public sealed class GetUsuarioByIdHandler(IUsuarioRepository usuarioRepository)
+public sealed class GetUsuarioByIdHandler(ApplicationDbContext dbContext) : IRequestHandler<GetUsuarioByIdQuery, GetUsuarioByIdResult?>
 {
-    public async Task<GetUsuarioByIdResult?> HandleAsync(GetUsuarioByIdQuery query, CancellationToken cancellationToken)
+    public async ValueTask<GetUsuarioByIdResult?> Handle(GetUsuarioByIdQuery query, CancellationToken cancellationToken)
     {
-        var usuario = await usuarioRepository.GetByIdAsync(query.Id, cancellationToken);
+        var usuario = await dbContext.Usuarios
+            .AsNoTracking()
+            .FirstOrDefaultAsync(usuario => usuario.Id == UsuarioId.From(query.Id), cancellationToken);
 
         return usuario is null
             ? null
-            : new GetUsuarioByIdResult(usuario.Id, usuario.Nombre, usuario.Apellido, usuario.Email.Value);
+            : new GetUsuarioByIdResult(usuario.Id.Value, usuario.Nombre, usuario.Apellido, usuario.Email.Value);
     }
 }

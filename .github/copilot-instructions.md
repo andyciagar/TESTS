@@ -103,13 +103,14 @@ Api/
 - Los endpoints deben ser delgados: reciben request, delegan al caso de uso y traducen el resultado a HTTP.
 - Evitar que los endpoints contengan logica de negocio.
 - Los contratos HTTP deben representar necesidades de transporte, no exponer directamente entidades de dominio.
+- Este proyecto usa controladores; no introducir Minimal APIs ni FastEndpoints salvo instruccion explicita.
 
 ## Reglas para Data
 
 - La persistencia debe modelar el dominio sin contaminarlo con detalles de EF Core.
 - Mantener configuraciones de EF separadas de las entidades.
 - Usar `IEntityTypeConfiguration<T>` para mapeos cuando aplique.
-- Si se usan repositorios, que sean especificos al caso de uso o al agregado; evitar repositorios genericos innecesarios.
+- Preferir `ApplicationDbContext` directo dentro de los handlers cuando el proyecto lo requiera, en vez de abstraer EF Core con repositorios o interfaces artificiales.
 
 ## Convenciones de implementacion
 
@@ -121,6 +122,7 @@ Api/
 - Mantener cambios pequenos, cohesionados y consistentes con esta estructura.
 - La clase base `Entity` debe contener solo campos reutilizables.
 - Si un valor requiere tipado fuerte, declararlo con `Vogen` dentro de `Domain/ValueObjects`.
+- Despues de cada actualizacion relevante, ejecutar `dotnet build` antes de continuar.
 
 ## Regla de oro
 
@@ -132,5 +134,6 @@ Api/
 
 - La unidad `Usuario` se implementa con entidad en `Domain/Entities`, base `Entity` en `Domain/Common` y objeto de valor `Email` generado con `Vogen` en `Domain/ValueObjects`.
 - Las features de `Usuario` viven en `Application/Features/Usuarios/<FeatureName>` con `Command` o `Query`, `Handler` y `Result`.
-- Los endpoints HTTP de `Usuario` viven en `Infrastructure/Api/Endpoints` y solo delegan a handlers de aplicacion.
-- Mientras no exista persistencia real, la implementacion inicial de datos puede vivir en `Infrastructure/Data/Repositories` usando almacenamiento en memoria.
+- Los endpoints HTTP de `Usuario` viven en `Infrastructure/Api/Controllers` y solo delegan a handlers de aplicacion.
+- `Usuario` utiliza `ApplicationDbContext` en `Infrastructure/Data`, configuracion EF Core separada y listado paginado con `pageNumber` y `pageSize`.
+- El listado de usuarios no debe exponer `Email` si la feature no lo necesita.

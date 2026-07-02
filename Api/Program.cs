@@ -1,17 +1,36 @@
-using Api.Application.Abstractions;
+using Api.Application.Behaviors;
 using Api.Application.Features.Usuarios.CreateUsuario;
-using Api.Application.Features.Usuarios.GetUsuarioById;
-using Api.Infrastructure.Api.Endpoints;
-using Api.Infrastructure.Data.Repositories;
+using Api.Infrastructure.Data;
+using Api.Infrastructure.Data.Initialization;
+using FluentValidation;
+using Mediator;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddSingleton<IUsuarioRepository, InMemoryUsuarioRepository>();
-builder.Services.AddScoped<CreateUsuarioHandler>();
-builder.Services.AddScoped<GetUsuarioByIdHandler>();
+builder.AddSqlServerDbContext<ApplicationDbContext>("bd");
+builder.Services.AddValidatorsFromAssemblyContaining<CreateUsuarioCommandValidator>();
+builder.Services.AddMediator(options =>
+{
+    options.Assemblies = [typeof(CreateUsuarioCommand)];
+    options.ServiceLifetime = ServiceLifetime.Scoped;
+    options.PipelineBehaviors =
+    [
+        typeof(LoggingBehavior<,>),
+        typeof(TimingBehavior<,>),
+        typeof(ValidationBehavior<,>)
+    ];
+});
+builder.Services.AddScoped<DatabaseInitializer>();
 
 var app = builder.Build();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+    await initializer.InitializeAsync();
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -19,6 +38,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapUsuarioEndpoints();
+app.MapControllers();
 
 app.Run();
