@@ -16,7 +16,7 @@ public sealed class RegistrarUsuarioTests : FunctionalTestBase
 
         response.StatusCode.ShouldBe(HttpStatusCode.Created);
 
-        var createdUsuario = await response.Content.ReadFromJsonAsync<CreateUsuarioResult>();
+        var createdUsuario = await response.Content.ReadFromJsonAsync<RegistrarUsuarioResult>();
 
         createdUsuario.ShouldNotBeNull();
         createdUsuario.Nombre.ShouldBe(command.Nombre);

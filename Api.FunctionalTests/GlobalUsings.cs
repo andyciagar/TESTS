@@ -1,7 +1,6 @@
 global using System.Net;
 global using System.Net.Http.Json;
-global using Api.Application.Features.Usuarios.CreateUsuario;
-global using Api.Application.Features.Usuarios.GetUsuarios;
+global using Api.Application.Features.Usuarios;
 global using Api.Infrastructure.Data;
 global using Bogus;
 global using Mediator;

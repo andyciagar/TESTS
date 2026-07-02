@@ -15,7 +15,7 @@ public sealed class ObtenerUsuariosTests : FunctionalTestBase
             await Context.SendAsync(command);
         }
 
-        var result = await Client.GetFromJsonAsync<GetUsuariosResult>("/api/usuarios?pageNumber=1&pageSize=2");
+        var result = await Client.GetFromJsonAsync<ObtenerUsuariosResult>("/api/usuarios?pageNumber=1&pageSize=2");
 
         result.ShouldNotBeNull();
         result.PageNumber.ShouldBe(1);
@@ -35,7 +35,7 @@ public sealed class ObtenerUsuariosTests : FunctionalTestBase
             await Context.SendAsync(command);
         }
 
-        var result = await Client.GetFromJsonAsync<GetUsuariosResult>("/api/usuarios?pageNumber=2&pageSize=2");
+        var result = await Client.GetFromJsonAsync<ObtenerUsuariosResult>("/api/usuarios?pageNumber=2&pageSize=2");
 
         result.ShouldNotBeNull();
         result.PageNumber.ShouldBe(2);

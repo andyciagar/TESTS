@@ -1,4 +1,3 @@
-using Api.Application.Features.Usuarios.UpdateUsuario;
 using Api.FunctionalTests.Testing;
 using Api.FunctionalTests.Testing.Factories;
 
@@ -16,7 +15,7 @@ public sealed class ActualizarUsuarioTests : FunctionalTestBase
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var updated = await response.Content.ReadFromJsonAsync<UpdateUsuarioResult>();
+        var updated = await response.Content.ReadFromJsonAsync<ActualizarUsuarioResult>();
         updated.ShouldNotBeNull();
         updated.Nombre.ShouldBe("Carlos");
         updated.Apellido.ShouldBe("Nuñez");

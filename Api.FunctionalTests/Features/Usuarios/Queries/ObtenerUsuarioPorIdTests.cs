@@ -1,4 +1,3 @@
-using Api.Application.Features.Usuarios.GetUsuarioById;
 using Api.FunctionalTests.Testing;
 using Api.FunctionalTests.Testing.Factories;
 
@@ -16,7 +15,7 @@ public sealed class ObtenerUsuarioPorIdTests : FunctionalTestBase
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-        var usuario = await response.Content.ReadFromJsonAsync<GetUsuarioByIdResult>();
+        var usuario = await response.Content.ReadFromJsonAsync<ObtenerUsuarioPorIdResult>();
 
         usuario.ShouldNotBeNull();
         usuario.Id.ShouldBe(createdUsuario.Id);
@@ -31,7 +30,7 @@ public sealed class ObtenerUsuarioPorIdTests : FunctionalTestBase
         var command = UsuarioDataFactory.CreateCommand();
         var createdUsuario = await Context.SendAsync(command);
 
-        var usuario = await Context.SendAsync(new GetUsuarioByIdQuery(createdUsuario.Id));
+        var usuario = await Context.SendAsync(new ObtenerUsuarioPorIdQuery(createdUsuario.Id));
 
         usuario.ShouldNotBeNull();
         usuario.Id.ShouldBe(createdUsuario.Id);
