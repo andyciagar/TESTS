@@ -1,5 +1,7 @@
 using Api.FunctionalTests.Testing;
 using Api.FunctionalTests.Testing.Factories;
+using Api.Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.FunctionalTests.Features.Usuarios.Commands;
 
@@ -40,9 +42,10 @@ public sealed class RegistrarUsuarioTests : FunctionalTestBase
     {
         var command = UsuarioDataFactory.CreateCommand();
         var created = await Context.SendAsync(command);
+        var usuarioId = UsuarioId.From(created.Id);
 
         var persisted = await Context.ExecuteDbContextAsync(dbContext =>
-            dbContext.Usuarios.IgnoreQueryFilters().FirstOrDefaultAsync(item => item.Id.Value == created.Id));
+            dbContext.Usuarios.IgnoreQueryFilters().FirstOrDefaultAsync(item => item.Id == usuarioId));
 
         persisted.ShouldNotBeNull();
         persisted.Email.Value.ShouldBe(command.Email.ToLowerInvariant());

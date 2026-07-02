@@ -1,6 +1,8 @@
 using Api.Application.Features.Usuarios.DeleteUsuario;
 using Api.FunctionalTests.Testing;
 using Api.FunctionalTests.Testing.Factories;
+using Api.Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 
 namespace Api.FunctionalTests.Features.Usuarios.Commands;
 
@@ -10,13 +12,14 @@ public sealed class EliminarUsuarioTests : FunctionalTestBase
     public async Task Should_soft_delete_usuario_using_http_endpoint()
     {
         var created = await Context.SendAsync(UsuarioDataFactory.CreateCommand());
+        var usuarioId = UsuarioId.From(created.Id);
 
         var response = await Client.DeleteAsync($"/api/usuarios/{created.Id}");
 
         response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
 
         var deleted = await Context.ExecuteDbContextAsync(dbContext =>
-            dbContext.Usuarios.IgnoreQueryFilters().FirstAsync(item => item.Id.Value == created.Id));
+            dbContext.Usuarios.IgnoreQueryFilters().FirstAsync(item => item.Id == usuarioId));
 
         deleted.IsDeleted.ShouldBeTrue();
     }
