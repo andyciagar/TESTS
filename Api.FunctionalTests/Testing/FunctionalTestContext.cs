@@ -36,6 +36,8 @@ public sealed class FunctionalTestContext : IAsyncDisposable
         var connectionString = await distributedApplication.GetConnectionStringAsync("bd")
             ?? throw new InvalidOperationException("No se pudo obtener la cadena de conexion 'bd' del AppHost de test.");
 
+        await WaitForSqlServerAsync(connectionString);
+
         var webApplicationFactory = new ApiWebApplicationFactory(connectionString);
 
         _ = webApplicationFactory.CreateClient();
@@ -50,6 +52,27 @@ public sealed class FunctionalTestContext : IAsyncDisposable
         });
 
         return new FunctionalTestContext(distributedApplication, webApplicationFactory, connectionString, respawner);
+    }
+
+    private static async Task WaitForSqlServerAsync(string connectionString)
+    {
+        const int maxAttempts = 30;
+
+        for (var attempt = 1; attempt <= maxAttempts; attempt++)
+        {
+            try
+            {
+                await using var connection = new SqlConnection(connectionString);
+                await connection.OpenAsync();
+                return;
+            }
+            catch (SqlException) when (attempt < maxAttempts)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(2));
+            }
+        }
+
+        throw new InvalidOperationException("SQL Server de pruebas no estuvo listo dentro del tiempo esperado.");
     }
 
     public async Task ResetDatabaseAsync()
