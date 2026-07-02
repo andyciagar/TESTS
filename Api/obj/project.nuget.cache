@@ -11,7 +11,7 @@
     {
       "code": "NU1903",
       "level": "Warning",
-      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "message": "El paquete \"Microsoft.OpenApi\" 2.0.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
       "projectPath": "C:\\Users\\Admin\\Desktop\\TESTS\\Api\\Api.csproj",
       "warningLevel": 1,
       "filePath": "C:\\Users\\Admin\\Desktop\\TESTS\\Api\\Api.csproj",
