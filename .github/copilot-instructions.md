@@ -126,6 +126,8 @@ Api/
 - Los tests funcionales deben vivir en un proyecto separado y no deben invocar handlers directamente.
 - Los tests funcionales deben levantar la aplicacion con DI completo, usar otro AppHost de test para infraestructura y poder hablar con la base de datos real de test.
 - Para tests usar `NUnit`, `Shouldly`, `Bogus`, `Respawn`, `Aspire.Hosting.Testing` y `Microsoft.AspNetCore.Mvc.Testing` cuando aplique.
+- Separar los tests por `Commands`, `Queries` y `EdgeCases` cuando el feature lo justifique.
+- Si un test nuevo o existente falla de forma inesperada, no cambiar el comportamiento funcional para esconder el problema sin confirmarlo antes con el usuario.
 
 ## Regla de oro
 
@@ -141,3 +143,4 @@ Api/
 - `Usuario` utiliza `ApplicationDbContext` en `Infrastructure/Data`, configuracion EF Core separada y listado paginado con `pageNumber` y `pageSize`.
 - El listado de usuarios no debe exponer `Email` si la feature no lo necesita.
 - La infraestructura de tests funcionales usa `Api.Tests.AppHost` para SQL Server efimero y `Api.FunctionalTests` para pruebas end to end y de pipeline con DI real.
+- El CRUD de `Usuario` usa `soft delete`; las consultas deben ignorar usuarios eliminados y la eliminacion solo marca el registro.

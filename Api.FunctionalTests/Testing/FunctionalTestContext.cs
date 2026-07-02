@@ -97,6 +97,13 @@ public sealed class FunctionalTestContext : IAsyncDisposable
         await dbContext.SaveChangesAsync();
     }
 
+    public async Task<T> ExecuteDbContextAsync<T>(Func<ApplicationDbContext, Task<T>> action)
+    {
+        await using var scope = Services.CreateAsyncScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        return await action(dbContext);
+    }
+
     public async ValueTask DisposeAsync()
     {
         await webApplicationFactory.DisposeAsync();

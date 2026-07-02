@@ -1,7 +1,7 @@
 using Api.FunctionalTests.Testing;
 using Api.FunctionalTests.Testing.Factories;
 
-namespace Api.FunctionalTests.Features.Usuarios;
+namespace Api.FunctionalTests.Features.Usuarios.Queries;
 
 public sealed class ObtenerUsuariosTests : FunctionalTestBase
 {
@@ -23,5 +23,23 @@ public sealed class ObtenerUsuariosTests : FunctionalTestBase
         result.TotalCount.ShouldBe(3);
         result.Items.Count.ShouldBe(2);
         result.Items.First().GetType().GetProperty("Email").ShouldBeNull();
+    }
+
+    [Test]
+    public async Task Should_return_second_page_when_requested()
+    {
+        var commands = UsuarioDataFactory.CreateMany(5);
+
+        foreach (var command in commands)
+        {
+            await Context.SendAsync(command);
+        }
+
+        var result = await Client.GetFromJsonAsync<GetUsuariosResult>("/api/usuarios?pageNumber=2&pageSize=2");
+
+        result.ShouldNotBeNull();
+        result.PageNumber.ShouldBe(2);
+        result.PageSize.ShouldBe(2);
+        result.Items.Count.ShouldBe(2);
     }
 }

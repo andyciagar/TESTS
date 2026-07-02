@@ -30,7 +30,14 @@ public sealed class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
             .HasMaxLength(200)
             .IsRequired();
 
+        builder.Property(usuario => usuario.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
+
         builder.HasIndex(usuario => usuario.Email)
-            .IsUnique();
+            .IsUnique()
+            .HasFilter("[IsDeleted] = 0");
+
+        builder.HasQueryFilter(usuario => !usuario.IsDeleted);
     }
 }
