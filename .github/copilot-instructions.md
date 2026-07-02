@@ -99,7 +99,7 @@ Api/
 
 ## Reglas para API
 
-- Usar Minimal APIs o endpoints agrupados por feature si no se indica lo contrario.
+- Usar controladores agrupados por feature si no se indica lo contrario.
 - Los endpoints deben ser delgados: reciben request, delegan al caso de uso y traducen el resultado a HTTP.
 - Evitar que los endpoints contengan logica de negocio.
 - Los contratos HTTP deben representar necesidades de transporte, no exponer directamente entidades de dominio.
