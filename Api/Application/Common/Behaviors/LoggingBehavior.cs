@@ -1,6 +1,6 @@
 using Mediator;
 
-namespace Api.Application.Behaviors;
+namespace Api.Application.Common.Behaviors;
 
 public sealed class LoggingBehavior<TMessage, TResponse>(ILogger<LoggingBehavior<TMessage, TResponse>> logger)
     : IPipelineBehavior<TMessage, TResponse>

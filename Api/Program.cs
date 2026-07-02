@@ -1,4 +1,4 @@
-using Api.Application.Behaviors;
+using Api.Application.Common.Behaviors;
 using Api.Application.Features.Usuarios;
 using Api.Infrastructure.Data;
 using Api.Infrastructure.Data.Initialization;

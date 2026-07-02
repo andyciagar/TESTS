@@ -1,4 +1,4 @@
-using Api.Application.Behaviors;
+using Api.Application.Common.Behaviors;
 using FluentValidation;
 using Mediator;
 using ValidationException = FluentValidation.ValidationException;

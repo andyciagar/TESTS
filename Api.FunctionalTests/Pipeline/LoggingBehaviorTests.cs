@@ -1,4 +1,4 @@
-using Api.Application.Behaviors;
+using Api.Application.Common.Behaviors;
 using Mediator;
 
 namespace Api.FunctionalTests.Pipeline;

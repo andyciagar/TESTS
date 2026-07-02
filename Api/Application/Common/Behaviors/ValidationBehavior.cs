@@ -1,7 +1,7 @@
 using FluentValidation;
 using Mediator;
 
-namespace Api.Application.Behaviors;
+namespace Api.Application.Common.Behaviors;
 
 public sealed class ValidationBehavior<TMessage, TResponse>(IEnumerable<IValidator<TMessage>> validators)
     : IPipelineBehavior<TMessage, TResponse>

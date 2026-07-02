@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using Mediator;
 
-namespace Api.Application.Behaviors;
+namespace Api.Application.Common.Behaviors;
 
 public sealed class TimingBehavior<TMessage, TResponse>(ILogger<TimingBehavior<TMessage, TResponse>> logger)
     : IPipelineBehavior<TMessage, TResponse>
