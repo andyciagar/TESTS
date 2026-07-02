@@ -4,12 +4,15 @@ using Api.Infrastructure.Data;
 using Api.Infrastructure.Data.Initialization;
 using FluentValidation;
 using Mediator;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.AddSqlServerDbContext<ApplicationDbContext>("bd");
+builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("bd")));
+builder.EnrichSqlServerDbContext<ApplicationDbContext>();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateUsuarioCommandValidator>();
 builder.Services.AddMediator(options =>
 {
@@ -41,3 +44,5 @@ app.UseHttpsRedirection();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program;

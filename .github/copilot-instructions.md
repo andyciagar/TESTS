@@ -123,6 +123,9 @@ Api/
 - La clase base `Entity` debe contener solo campos reutilizables.
 - Si un valor requiere tipado fuerte, declararlo con `Vogen` dentro de `Domain/ValueObjects`.
 - Despues de cada actualizacion relevante, ejecutar `dotnet build` antes de continuar.
+- Los tests funcionales deben vivir en un proyecto separado y no deben invocar handlers directamente.
+- Los tests funcionales deben levantar la aplicacion con DI completo, usar otro AppHost de test para infraestructura y poder hablar con la base de datos real de test.
+- Para tests usar `NUnit`, `Shouldly`, `Bogus`, `Respawn`, `Aspire.Hosting.Testing` y `Microsoft.AspNetCore.Mvc.Testing` cuando aplique.
 
 ## Regla de oro
 
@@ -137,3 +140,4 @@ Api/
 - Los endpoints HTTP de `Usuario` viven en `Infrastructure/Api/Controllers` y solo delegan a handlers de aplicacion.
 - `Usuario` utiliza `ApplicationDbContext` en `Infrastructure/Data`, configuracion EF Core separada y listado paginado con `pageNumber` y `pageSize`.
 - El listado de usuarios no debe exponer `Email` si la feature no lo necesita.
+- La infraestructura de tests funcionales usa `Api.Tests.AppHost` para SQL Server efimero y `Api.FunctionalTests` para pruebas end to end y de pipeline con DI real.

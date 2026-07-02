@@ -1,0 +1,14 @@
+global using System.Net;
+global using System.Net.Http.Json;
+global using Api.Application.Features.Usuarios.CreateUsuario;
+global using Api.Application.Features.Usuarios.GetUsuarios;
+global using Api.Infrastructure.Data;
+global using Bogus;
+global using Mediator;
+global using Microsoft.AspNetCore.Mvc.Testing;
+global using Microsoft.Data.SqlClient;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using NUnit.Framework;
+global using Respawn;
+global using Shouldly;
